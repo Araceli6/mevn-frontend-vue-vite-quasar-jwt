@@ -1,36 +1,22 @@
 <template>
   <q-page padding>
-    <!--<q-btn @click="userStore.access">Ingresar</q-btn>-->
-    <q-btn @click="createLink">Crear Link</q-btn>
-    <!--<q-btn @click="userStore.logout">Cerrar Sesión</q-btn>-->
-    {{ userStore.token }} - {{ userStore.expiresIn }}
+    <AddLink />
+    <pre>
+      {{ userLink.links }}
+    </pre>
+    <template v-for="link of userLink.links" :key="link._id">
+      <LinkCard />
+    </template>
   </q-page>
 </template>
 
 <script setup>
-import { api } from 'src/boot/axios';
-import { useUserStore } from '../stores/user-store';
+import { useLinkStore } from 'src/stores/link-store';
 
-const userStore = useUserStore();
+//components
+import AddLink from 'src/components/AddLink.vue';
+import LinkCard from 'src/components/LinkCard.vue';
 
-//userStore.refreshToken();
 
-const createLink = async () => {
-  try {
-    const res = await api({
-      method: 'POST',
-      url: '/links',
-      headers: {
-        Authorization: 'Bearer ' + token.value
-      },
-      data: {
-        longLink: "https://www.npmjs.com/package//axios",
-      },
-    });
-    console.log(res.data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+const userLink = useLinkStore();
 </script>
