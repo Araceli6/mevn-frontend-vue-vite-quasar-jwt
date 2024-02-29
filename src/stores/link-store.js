@@ -2,15 +2,18 @@ import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 import { useUserStore } from "./user-store";
 import { ref } from "vue";
+import { useQuasar } from 'quasar'
 
 export const useLinkStore = defineStore('link', () => {
 
     const userStore = useUserStore();
+    const $q = useQuasar();
 
     const links = ref([]);
 
     const createLink = async (longLink) => {
         try {
+            $q.loading.show();
             const res = await api({
                 method: "POST",
                 url: "/links",
@@ -26,11 +29,14 @@ export const useLinkStore = defineStore('link', () => {
         } catch (error) {
           //console.log(error.response?.data || error);
           throw error.response?.data || error;
+        } finally {
+            $q.loading.hide();
         }
     };
 
     const getLinks = async() => {
         try {
+            $q.loading.show();
             console.log('llamando a todos los links');
             const res = await api({
                 method: "GET",
@@ -39,14 +45,52 @@ export const useLinkStore = defineStore('link', () => {
                     Authorization: "Bearer " + userStore.token
                 },
             });
-            //links.value = res.data.links.map((item) => item);
             links.value = [...res.data.links];
         } catch (error) {
            console.log(error.response?.data || error);
+        } finally {
+            $q.loading.hide();
         }
     };
 
     getLinks();
 
-    return { createLink, links, };
+    const removeLink =async (_id) => {
+        try {
+            $q.loading.show();
+            await api({
+                method: "DELETE",
+                url: `links/${_id}`,
+                headers: {
+                    Authorization: "Bearer " + userStore.token
+                },
+            });
+            links.value = links.value.filter((item) => item._id !== _id);
+        } catch (error) {
+            throw error.response?.data || error
+        } finally {
+            $q.loading.hide();
+        }
+    };
+
+    const editLink = async (newLink) => {
+        try {
+            $q.loading.show();
+            await api({
+                method: "PATCH",
+                url: `links/${newLink._id}`,
+                data: {longLink: newLink.longLink},
+                headers: {
+                    Authorization: "Bearer " + userStore.token
+                },
+            });
+            links.value = links.value.map((item) => item._id === newLink._id ? newLink : item);
+        } catch (error) {
+            throw error.response?.data || error
+        } finally {
+            $q.loading.hide();
+        }
+    };
+
+    return { createLink, links, removeLink, editLink };
 });
