@@ -11,30 +11,34 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+        <q-toolbar-title> Quasar App </q-toolbar-title>
 
-        <q-btn class="q-mr-sm" color="green" to="/login" v-if="!userStore.token">Login</q-btn>
-        <q-btn color="green" to="/register" v-if="!userStore.token">Register</q-btn>
+        <q-btn class="q-mr-sm" color="green" to="/login" v-if="!userStore.token"
+          >Login</q-btn
+        >
+        <q-btn color="green" to="/register" v-if="!userStore.token"
+          >Register</q-btn
+        >
 
-        <q-btn class="q-mr-sm" color="orange" to="/" v-if="userStore.token">Inicio</q-btn>
-        <q-btn class="q-mr-sm" color="red" @click="logout" v-if="userStore.token">Logout</q-btn>
-        <q-btn color="black" to="/protected" v-if="userStore.token">Protected</q-btn>
+        <q-btn class="q-mr-sm" color="orange" to="/" v-if="userStore.token"
+          >Inicio</q-btn
+        >
+        <q-btn
+          class="q-mr-sm"
+          color="red"
+          @click="logout"
+          v-if="userStore.token"
+          >Logout</q-btn
+        >
+        <q-btn color="black" to="/protected" v-if="userStore.token"
+          >Protected</q-btn
+        >
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+        <q-item-label header> Essential Links </q-item-label>
 
         <EssentialLink
           v-for="link in essentialLinks"
@@ -51,19 +55,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-import { useUserStore } from '../stores/user-store';
-import { useRouter } from 'vue-router';
+import { ref } from "vue";
+import EssentialLink from "components/EssentialLink.vue";
+import { useUserStore } from "../stores/user-store";
+import { useRouter } from "vue-router";
 
 const leftDrawerOpen = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
 
-
-const logout = () => {
-  userStore.logout();
-  router.push("/login");
+const logout = async () => {
+  await userStore.logout();
+  window.location.href = "/login";
 };
 
 const accessUser = async () => {
@@ -71,52 +74,52 @@ const accessUser = async () => {
   router.push("/");
 };
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
 const essentialLinks = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: "Docs",
+    caption: "quasar.dev",
+    icon: "school",
+    link: "https://quasar.dev",
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: "Github",
+    caption: "github.com/quasarframework",
+    icon: "code",
+    link: "https://github.com/quasarframework",
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: "Discord Chat Channel",
+    caption: "chat.quasar.dev",
+    icon: "chat",
+    link: "https://chat.quasar.dev",
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    title: "Forum",
+    caption: "forum.quasar.dev",
+    icon: "record_voice_over",
+    link: "https://forum.quasar.dev",
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+    title: "Twitter",
+    caption: "@quasarframework",
+    icon: "rss_feed",
+    link: "https://twitter.quasar.dev",
   },
   {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
+    title: "Facebook",
+    caption: "@QuasarFramework",
+    icon: "public",
+    link: "https://facebook.quasar.dev",
   },
   {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+    title: "Quasar Awesome",
+    caption: "Community Quasar projects",
+    icon: "favorite",
+    link: "https://awesome.quasar.dev",
+  },
+];
 </script>
